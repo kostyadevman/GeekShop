@@ -2,7 +2,7 @@ from django.shortcuts import render
 import json
 
 def main(request):
-    # title = 'Главная'
+    title = 'Главная'
     # products = [
     #         {
     #             "name": "Отличный стул",
@@ -17,7 +17,7 @@ def main(request):
     #             "image_src": "product-2.jpg",
     #             "image_href": "/product/2/",
     #             "alt": "продукт 2"
-    #         }
+    #         },
     # ]
     # content = {'title': title, 'products': products}
     json_data = open('static/products.json').read()
@@ -52,8 +52,9 @@ def products(request):
             'desc': 'Просто попробуйте',
             'image_src': 'product-31.jpg',
             'alt': 'продукт 31'
-        }
+        },
     ]
+
     content = {
         'title': title,
         'links_menu': links_menu,

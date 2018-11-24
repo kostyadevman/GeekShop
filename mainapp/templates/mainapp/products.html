@@ -2,20 +2,21 @@
 {% load staticfiles %}
 
 {% block menu %}
-    <div class="hero-white">
+    <div class="hero">
         <div class="header clearfix">
             <a href={% url 'products' %} class="logo"></a>
             {% include 'mainapp/includes/inc_menu.html' %}
             <a href="#" class="search"></a>
             <a href="#" class="basket"></a>
         </div>
+        <h1>Продукты</h1>
     </div>
 {% endblock %}
 
-{% block content %}<div class="hero-white">
+{% block content %}
     <div class="details">
         <div class="links clearfix">
-            {% include links_menu %}
+            {% include 'mainapp/includes/inc_categories_menu.html' %}
         </div>
 
         <div class="details-products">
@@ -50,9 +51,9 @@
                     заказать <i class="fa fa-chevron-right" aria-hidden="true"></i>
                 </a>
                 <div class="description-text">
-                    <p>Расположитесь комфортно.</p>
+                    <p>Расположитесь комфортно.</p> 
                     <p>Отличное качество материалов
-                    позволит вам это.</p>
+                    позволит вам это.</p> 
                     <p>Различные цвета</p>
                     <p>высочайший уровень
                     эргономики и прочность.</p>
@@ -66,34 +67,17 @@
                 <a class="explore" href="#">показать все <img src="/static/img/arrow.png" alt=""></a>
             </div>
             <div class="related-products clearfix">
-                <div class="block">
-                    <a href="#"><img src="/static/img/product-11.jpg" alt="">
-                        <div class="text">
-                            <img src="/static/img/icon-hover.png" alt="img">
-                            <h4>Стул повышенного качества</h4>
-                            <p>Не оторваться. </p>
-                        </div>
-                    </a>
-                </div>
-                <div class="block">
-                    <a href="#"><img src="/static/img/product-21.jpg" alt="">
-                        <div class="text">
-                            <img src="/static/img/icon-hover.png" alt="img">
-                            <h4>Стул повышенного качества</h4>
-                            <p>Не оторваться. </p>
-                        </div>
-                    </a>
-                </div>
-                <div class="block">
-                    <a href="#"><img src="/static/img/product-31.jpg" alt="">
-                        <div class="text">
-                            <img src="/static/img/icon-hover.png" alt="img">
-                            <h4>Стул повышенного качества</h4>
-                            <p>Не оторваться. </p>
-                        </div>
-                    </a>
-                </div>
-
+                {% for same_product in same_products %}
+                    <div class="block">
+                        <a href="#"><img src="{% static 'img/' %}{{ same_product.image_src }}" alt="{{ same_product.image_alt }}">
+                            <div class="text">
+                                <img src="/static/img/icon-hover.png" alt="img">
+                                <h4>{{ same_product.name }}</h4>
+                                <p>{{ same_product.desc }} </p>
+                            </div>
+                        </a>
+                    </div>
+                {% endfor %}
             </div>
         </div>
     </div>

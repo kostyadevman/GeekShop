@@ -1,12 +1,12 @@
 <ul class="links-menu">
     <li>
-        <a href="{% url 'mainapp.products:category' 0 %}">
+        <a href="/products/0/">
             все
         </a>
     </li>
     {% for link in links_menu %}
         <li>
-            <a href="{% url 'mainapp.products:category' link.pk %}">
+            <a href="/products/{{ link.pk }}/">
                 {{ link.name }}
             </a>
         </li>

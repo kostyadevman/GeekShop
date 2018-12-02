@@ -1,28 +1,14 @@
 from django.shortcuts import render
 import datetime
 from .models import ProductCategory, Product
-
+from django.shortcuts import get_object_or_404
 
 
 def main(request):
     title = 'главная'
-    # products = [
-    #     {
-    #         'name': 'Отличный стул',
-    #         'desc': 'Расположитесь комфортно.',
-    #         'image_src': 'product-1.jpg',
-    #         'image_href': '/product/1/',
-    #         'alt': 'продукт 1'
-    #     },
-    #     {
-    #         'name': 'Стул повышенного качества',
-    #         'desc': 'Не оторваться.',
-    #         'image_src': 'product-2.jpg',
-    #         'image_href': '/product/2/',
-    #         'alt': 'продукт 2'
-    #     },
-    # ]
-    products = Product.objects.all()[:4]
+    
+    products = Product.objects.all()[:3]
+    
     content = {'title': title, 'products': products}
     return render(request, 'mainapp/index.html', content)
     
@@ -30,37 +16,48 @@ def main(request):
 def products(request, pk=None):
     print(pk)
 
+    basket = {
+        'items': [],
+        'total_count': 0,
+        'total_sum': 0,
+    }
+    if request.user.is_authenticated:
+        basket['items'] = list(request.user.basket.all())
+
+        for item in basket['items']:
+            basket['total_count'] += item.quantity
+            basket['total_sum'] += item.product.price * item.quantity
+
+    
     title = 'продукты'
-    # links_menu = [
-    #     {'href': 'products_all', 'name': 'все'},
-    #     {'href': 'products_home', 'name': 'дом'},
-    #     {'href': 'products_office', 'name': 'офис'},
-    #     {'href': 'products_modern', 'name': 'модерн'},
-    #     {'href': 'products_classic', 'name': 'классика'},
-    # ]
-    # same_products = [
-    #     {
-    #         'name': 'Отличный стул',
-    #         'desc': 'Не оторваться.',
-    #         'image_src': 'product-11.jpg',
-    #         'alt': 'продукт 11'
-    #     },
-    #     {
-    #         'name': 'Стул повышенного качества',
-    #         'desc': 'Комфортно.',
-    #         'image_src': 'product-21.jpg',
-    #         'alt': 'продукт 21'
-    #     },
-    #     {
-    #         'name': 'Стул премиального качества',
-    #         'desc': 'Просто попробуйте.',
-    #         'image_src': 'product-31.jpg',
-    #         'alt': 'продукт 31'
-    #     },
-    # ]
     links_menu = ProductCategory.objects.all()
-    same_products = Product.objects.all()
-    content = {'title': title, 'links_menu': links_menu, 'same_products': same_products}
+
+    if pk is not None:
+        if pk == 0:
+            category = {'name': 'все'}
+            products = Product.objects.all()
+        else:
+            category = get_object_or_404(ProductCategory, pk=pk)
+            products = Product.objects.filter(category=category)
+            # products = Product.objects.filter(category=category)
+
+        content = {
+            'title': title,
+            'links_menu': links_menu,
+            'category': category,
+            'products': products,
+            'basket': basket
+        }
+        return render(request, 'mainapp/products_list.html',content)
+
+    same_products = Product.objects.all()[3:5]
+    
+    content = {
+        'title': title,
+        'links_menu': links_menu,
+        'same_products': same_products,
+        'basket': basket
+    }
     return render(request, 'mainapp/products.html', content)
     
 

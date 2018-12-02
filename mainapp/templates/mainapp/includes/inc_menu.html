@@ -5,7 +5,7 @@
         </a>
     </li>
     <li>
-        <a href="{% url 'products:index' %}" class="{% if request.resolver_match.url_name == 'products' %}active{% endif %}">
+        <a href="{% url 'products:index' %}" class="{% if request.resolver_match.namespace == 'products' %}active{% endif %}">
             продукты
         </a>
     </li>
@@ -21,6 +21,7 @@
             </a>
         </li>
     {% endif %}
+
     <li>
         {% if user.is_authenticated %}
             <a href="{% url 'auth:logout' %}">выйти</a>
@@ -28,4 +29,10 @@
             <a href="{% url 'auth:login' %}">войти</a>
         {% endif %}
     </li>
+
+    <li>
+        <span>{% if basket.items %}{{ basket.items|length }} тов.:сумма {{ basket.total_sum }}руб. {% endif %}</span>
+    </li>
+
+
 </ul>

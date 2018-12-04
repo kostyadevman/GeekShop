@@ -12,8 +12,21 @@ def load_from_json(file_name):
     with open(os.path.join(JSON_PATH, file_name + '.json'), 'r') as infile:
         return json.load(infile)
 
+def get_basket(user):
+    if user.is_authenticated:
+        return Basket.objects.filter(user=user)
+    else:
+        return []
 
+def get_same_products(hot_product):
+    same_product = Product.objects.filter(category=hot_product.category).exclude(pk=hot_product.pk)[:3]
 
+    return same_product
+
+def get_hot_product():
+    products = Product.objects.all()
+
+    return random.sample(list(products), 1)[0]
 
         
 def main(request):
@@ -33,6 +46,8 @@ def products(request, pk=None):
     title = 'продукты'
     links_menu = ProductCategory.objects.all()
     basket = get_basket(request.user)
+    hot_product = get_hot_product()
+    same_products = get_same_products(hot_product)
            
     if pk:
         if pk is None:
@@ -51,13 +66,15 @@ def products(request, pk=None):
         }
         
         return render(request, 'mainapp/products_list.html', content)
-    
+
+    hot_product = get_hot_product()
     same_products = get_same_products(hot_product)
     
     content = {
         'title': title,
         'links_menu': links_menu, 
         'same_products': same_products,
+        'hot_product': hot_product,
         'basket': basket,
     }
     
@@ -78,5 +95,18 @@ def contact(request):
     }
     
     return render(request, 'mainapp/contact.html', content)
-    
+
+def product(request, pk):
+        title = 'продукты'
+
+        content = {
+            'title': title,
+            'links_menu': ProductCategory.objects.all(),
+            'product': get_object_or_404(Product, pk=pk),
+            'basket': get_basket(request.user),
+        }
+
+        return render(request, 'mainapp/product.html', content)
+
+
     

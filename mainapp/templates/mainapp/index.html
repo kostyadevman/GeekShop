@@ -5,16 +5,16 @@
 {% block menu %}
     <div class="slider">
         <div class="header clearfix">
-            <a href="{% url 'main' %}" class="logo"></a>
                 {% include 'mainapp/includes/inc_menu.html' %}
-            <a href="#" class="search"></a>
-            <a href="#" class="basket"></a>
         </div>
         <div class="text-slider">
             <h3 class="green">тенденции</h3>
             <h3 class="big"> удобные стулья</h3>
             <p>Новый уровень комфорта. Отличные характеристики.</p>
-            <a href="#" class="button-order">заказать <img src="{% static 'img/arrow.png' %}" alt=""></a>
+            <a href="{% url 'products:index' %}" class="button-order">
+                заказать
+                <img src="{% static 'img/arrow.png' %}" alt="">
+            </a>
         </div>	
         <div class="navi">
             <a href="#"></a><a href="#"></a><a href="#"></a>
@@ -34,11 +34,15 @@
         <div class="tab-content">
             {% for product in products %}
                 <div class="block">
-                    <a href="{{ product.image_href }}"><img src="{% static 'img/' %}{{ product.image_src }}" alt="{{ product.alt }}"> 
+                    <a href="{% url 'products:product' product.pk %}">
+                        <img src="/media/{{ product.image }}" alt="{{ product.short_desc }}"> 
                         <div class="text">
-                            <img src="{% static 'img/icon-hover.png' %}" alt="{{ product.alt }}">
-                            <h4>{{ product.name }}</h4>
-                            <p>{{ product.desc }} </p>
+                            <img src="{% static 'img/icon-hover.png' %}" alt="img">
+                            <h3>Категория:{{ product.category.name }}</h3>
+                            <h4>Название: {{ product.name }}</h4>
+                            <p>Описание: {{ product.description }} </p>
+                            <p>Цена: {{ product.price }} </p>
+                            <p>На складе: {{ product.quantity }} </p>
                         </div> 
                     </a>
                 </div>

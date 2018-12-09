@@ -1,0 +1,29 @@
+{% extends 'adminapp/base.html' %}
+{% load staticfiles %}
+
+{% block content %}
+    <button class="new_user btn btn-rount form-control">
+        <a href="{% url 'admin:category_create' %}">
+            Новая категория
+        </a>
+    </button>
+    <div class="categories_list">
+        {% for object in objects %}
+            <div class="category_record">
+                <div class="category_name">{{ object.name|title }}</div>
+                <div class="category_actions">
+                    <button>
+                        <a href="{% url 'admin:products' object.pk %}">Товары категории</a>
+                    </button>
+                    <button>
+                        <a href="{% url 'admin:category_update' object.pk %}">Редактировать</a>
+                    </button>
+                    <button>
+                        <a href="{% url 'admin:category_delete' object.pk %}">удалить</a>
+                    </button>
+                </div>
+            </div>
+        {% endfor %}
+
+    </div>
+{% endblock %}

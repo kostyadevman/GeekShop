@@ -1,0 +1,49 @@
+{% extends 'adminapp/base.html' %}
+{% load staticfiles %}
+
+{% block content %}
+    <button class="new_user btn btn-rount form-control">
+        <a href="{% url 'admin:user_create' %}">
+            Новый пользователь
+        </a>
+    </button>
+    <div class="users_list">
+        {% for object in objects %}
+            <div class="user_record">
+                <img src="/media/{{ objects.avatar|default:'users_avatars/default.jpg' }}" alt="{{ objects.username }}"/>
+                <dev class="user_name">
+                    <p>
+                        <strong>
+                            {{ object.username }}
+                        </strong>
+                        {% if object.first_name %}
+                            <p>{{ object.first_name }}</p>
+                            {% if object.last_name %}
+                                <p>{{ object.last_name }}</p>
+                            {% endif %}
+                        {% endif %}
+                    </p>
+                </dev>
+            <div class="user_age">
+                Возраст: <br/>
+                {{ object.age }} лет
+            </div>
+            <div class="user_age">
+                is_active <br/>
+                {{ object.is_active }} лет
+            </div>
+            <button>
+                <a href="{%  url 'admin:user_update' object.pk %}">
+                    Редакторовать
+                </a>
+            </button>
+            <button>
+                <a href="{%  url 'admin:user_delete' object.pk %}">
+                    Удалить
+                </a>
+            </button>
+            </div>
+        {% endfor %}
+
+    </div>
+{% endblock %}
